@@ -1,29 +1,19 @@
 package com.red.innopolis;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by _red_ on 16.06.17.
  */
 public class ResourceThread extends Thread {
-    private static volatile boolean stopALL = false;
     private String path;
-//    private String compiler; // Регулярное выражение для поиска в строке
-//    private String spliter; // Разделитель слов
     private int numbersOfThread; // Кол-во потоков
-    private volatile Map<String, Integer> map = new ConcurrentHashMap<>();
     
     ResourceThread (String path, int numbersOfThread) {
         this.path = path;
