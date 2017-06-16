@@ -2,8 +2,6 @@ package com.red.innopolis;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -58,12 +56,14 @@ public class ResourceThread extends Thread {
             service.execute(() -> {
                 try {
                     String str;
-                    long num = 0;
+//                    long num = 0;
                     BufferedReader reader = new BufferedReader(new FileReader(f));
                     while (( str = reader.readLine()) != null) {
-                        num = Arrays.stream(str.split(" ")).
-                                mapToInt(Integer::parseInt).filter(o -> o > 0 && o % 2 == 0).sum();
-                        Resource.superIncrementSum(num);
+//                        num = Arrays.stream(str.split(" ")).
+//                                mapToInt(Integer::parseInt).filter(o -> o > 0 && o % 2 == 0).sum();
+//                        Resource.superIncrementSum(num);
+                        Resource.superIncrementSum(Arrays.stream(str.split(" ")).
+                                mapToInt(Integer::parseInt).filter(o -> o > 0 && o % 2 == 0).sum());
                         Resource.printSum();
                         try {
                             Thread.sleep(100);
