@@ -1,16 +1,18 @@
 package com.red.innopolis;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by _red_ on 16.06.17.
@@ -65,22 +67,16 @@ public class ResourceThread extends Thread {
 //          Собственно наш пулл
             service.execute(() -> {
                 try {
+                    String str;
+                    long num = 0;
                     BufferedReader reader = new BufferedReader(new FileReader(f));
-                    String str = reader.readLine(); // Построчно читаем файл f
-                    
-                    while (str != null) {
-    
-                        Pattern p = Pattern.compile("-?\\d+");
-                        Matcher m = p.matcher(str);
-                        
-                        while (m.find()) {
-                            Integer number = Integer.valueOf(m.group());
-                            if (number > 0 && number % 2 == 0)
-                                Resource.incrementSum();
-                        }
+                    while (( str = reader.readLine()) != null) {
+                        num = Arrays.stream(str.split(" ")).
+                                mapToInt(Integer::parseInt).filter(o -> o > 0 && o % 2 == 0).sum();
+                        Resource.superIncrementSum(num);
                         Resource.printSum();
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -94,20 +90,7 @@ public class ResourceThread extends Thread {
         try {
             service.awaitTermination(60, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-//          e.printStackTrace();
             System.out.println("All threads are Interrupted!");
-        }
-    }
-    
-    //    Метод для вывода мапы на консоль
-    private synchronized void printOrder () {
-        String leftAlignFormat = "| %-10s | %-9d |%n"; // Строка форматированного вывода
-        System.out.format("+------------+-----------+%n");
-        System.out.format("|   Words    |  Entries  |%n");
-        System.out.format("+------------+-----------+%n");
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.format(leftAlignFormat, "    " + entry.getKey(), entry.getValue());
-            System.out.format("+------------+-----------+%n");
         }
     }
 }

@@ -4,7 +4,7 @@ public class Main {
     
     public static void main(String[] args) {
         String path = "/Users/_red_/IdeaProjects/PossitiveStream/src/com/red/innopolis/Resources";
-        ResourceThread test = new ResourceThread(path , 1);
+        ResourceThread test = new ResourceThread(path , 4);
         test.start();
     }
 
