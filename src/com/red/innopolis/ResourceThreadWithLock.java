@@ -1,19 +1,22 @@
 package com.red.innopolis;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by _red_ on 16.06.17.
+ * Created by _red_ on 19.06.17.
  */
-public class ResourceThread extends Thread {
+public class ResourceThreadWithLock  extends Thread {
     private String path;
     private int numbersOfThread; // Кол-во потоков
     
-    ResourceThread (String path, int numbersOfThread) {
+    ResourceThreadWithLock (String path, int numbersOfThread) {
         this.path = path;
         this.numbersOfThread = numbersOfThread;
     }
@@ -63,7 +66,7 @@ public class ResourceThread extends Thread {
 //                        num = Arrays.stream(str.split(" ")).
 //                                mapToInt(Integer::parseInt).filter(o -> o > 0 && o % 2 == 0).sum();
 //                        Resource.superIncrementSum(num);
-                        Resource.superIncrementSum(Arrays.stream(str.split(" ")).
+                        Resource.lockLeakIncrementSum(Arrays.stream(str.split(" ")).
                                 mapToInt(v->{
                                     try{
                                         return Integer.parseInt(v);
@@ -71,8 +74,8 @@ public class ResourceThread extends Thread {
                                     catch(Exception ex){
                                         return 0;
                                     }}).filter(o -> o > 0 && o % 2 == 0).sum());
-                        Resource.printSum();
-                        
+                        Resource.lockLeakSum();
+
                         try {
                             Thread.sleep(10);
                         } catch (InterruptedException e) {
